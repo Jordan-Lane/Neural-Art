@@ -52,8 +52,8 @@ class NumpyArtGenerator:
         return numpy.stack(inputs).transpose(1, 2, 0).reshape(-1, len(inputs))
 
 
-    def forward_prop(self, inputs):
-        results = inputs.copy()
+    def forward_prop(self):
+        results = self.generate_input()
 
         (ncols, nrows) = self.resolution
 
@@ -83,11 +83,9 @@ if __name__ == "__main__":
     activation_string = "tanh"
 
     generator = NumpyArtGenerator(resolution, seed, num_layers, hidden_layer_size, activation_string, color)
-
-    input_values = generator.generate_input()
-    result = generator.forward_prop(input_values)
+    image_result = generator.forward_prop()
 
     filename = str(generator) + ".jpg"
-    save_numpy_image(result, filename)
+    save_numpy_image(image_result, filename)
 
     
