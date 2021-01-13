@@ -58,7 +58,7 @@ class NumpyArtGenerator:
         (ncols, nrows) = self.resolution
 
         for layer in range(0, self.num_layers):
-            print("Generating Image. Current neural layer: " + str(layer+1) + "/" + str(self.num_layers), end='\r')
+            print("Generating Image. Hidden Layer Size: " + str(self.hidden_layer_size) + " Current neural layer: " + str(layer+1) + "/" + str(self.num_layers), end='\r')
 
             if layer == self.num_layers - 1:
                 W = numpy.random.randn(results.shape[1], self.output_layer)
@@ -68,24 +68,26 @@ class NumpyArtGenerator:
             activation_function = self.activation[1]
             results = activation_function(numpy.matmul(results, W))
 
+        # Thought: How would the result change if I used proper normalization insted of the line below?...
         results = (1 + results)/2.0
-        results = (255.0*results.reshape(nrows, ncols, results.shape[-1])).astype(numpy.uint8)
 
+        results = (255.0*results.reshape(nrows, ncols, results.shape[-1])).astype(numpy.uint8)
         return results
 
 
+"""
 if __name__ == "__main__":
     resolution = (5120, 3200)
     seed = 8769999
     num_layers = 8
     hidden_layer_size = 8
     color = True
-    activation_string = "tanh"
+    activation_string = "sech"
 
     generator = NumpyArtGenerator(resolution, seed, num_layers, hidden_layer_size, activation_string, color)
     image_result = generator.forward_prop()
 
     filename = str(generator) + ".jpg"
     save_numpy_image(image_result, filename)
-
+"""
     
