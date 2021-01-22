@@ -1,5 +1,10 @@
 import numpy
 
+# Note: All activation functions here are dynamically added to numpy_image_nn during construction
+#   To add a new activation function write a function here that takes a numpy array 
+#   and returns the new activated array. 
+
+
 def tanh(matrix):
     return numpy.tanh(matrix)
 
@@ -16,6 +21,3 @@ def softmax(matrix):
 
 def sech(matrix):
     return 1.0 / numpy.cosh(matrix)
-
-# Meta programming idea: Use https://www.tutorialspoint.com/How-to-list-all-functions-in-a-Python-module
-#   to create a dict of names -> functions for use in the numpy_image activation layer

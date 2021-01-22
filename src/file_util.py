@@ -11,7 +11,7 @@ def make_dir(dir_name):
     return output_directory_fullpath
 
 def save_numpy_image(data, filename):
-    output_directory = "image_examples"
+    output_directory = "../image_examples"
     output_directory_fullpath = make_dir(output_directory)
 
     print("\nSaving image to " + output_directory + ": " + filename)
