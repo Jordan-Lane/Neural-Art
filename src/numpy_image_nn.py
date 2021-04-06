@@ -1,7 +1,9 @@
+import argparse
 import cv2
 import numpy
-import numpy_activation as activation
+import numpy_activations as activation_funcs
 import os
+import random
 
 from file_util import save_numpy_image
 from inspect import getmembers, isfunction
@@ -10,84 +12,49 @@ from inspect import getmembers, isfunction
 class NumpyArtGenerator:
     """ Generates imagery using randomness and a fully connected forward propagation network """
 
-
-    def __init__(self, resolution, color, seed, num_layers, hidden_layer_size, activation_list):
+    def __init__(self, resolution, seed, num_layers, layer_width, activation_name):
         """Initialize the network.
 
             resolution          -- tuple resolution of the output network 
-            color               -- Boolean describing if output is RGB or Greyscale
             seed                -- seed value used by numpy random 
             num_layers          -- the number of hidden layers in the neural network
-            hidden_layer_size   -- the number of perceptrons in each hidden layer 
-            activation_list     -- a list of activation function names used in the network. The list can have a length of:
-                                    -> len(activation_list) == 1              the same activation function is used on all layers
-                                    -> len(activation_list) == num_layers     each layer receives its own activation functions
+            layer_width         -- the number of perceptrons in each hidden layer 
+            activation_name     -- name of the activation function used in each hidden layer
         """
         self.resolution = resolution
-        self.color = color
 
         self.seed = seed
+        numpy.random.seed(self.seed)
 
         self.num_layers = num_layers
-        self.hidden_layer_size = hidden_layer_size
-        
-        self.__set_activation(activation_list)
+        self.layer_width = layer_width
+        self.output_layer = 3
 
-        if color:
-            self.output_layer = 3
-        else:
-            self.output_layer = 1
-
-        if seed:
-            numpy.random.seed(seed)
+        self.__set_activation(activation_name)
 
 
     def __str__(self):
         """String representation of the network. """
 
-        color_string = "RGB" if self.color else "BW"
-
-        if len(self.activations) == 1:
-            activation_string = self.activations[0].__name__
-        else:
-            activation_string = "mixed"
-
-        return "-".join([str(self.seed), str(activation_string), str(self.num_layers), str(self.hidden_layer_size), color_string])
+        activation_string = self.activation[0]
+        return "-".join([str(self.seed), str(activation_string), str(self.num_layers), str(self.layer_width)])
 
 
-    def __set_activation(self, activation_list):
+    def __set_activation(self, activation_name):
         """Set the activation functions for the network. """
 
-        if not isinstance(activation_list, list):
-            raise TypeError("Activation_list is incorrect type. Expected: <class 'list'> Received: " + str(type(activation_list)))
-        elif len(activation_list) != 1 and len(activation_list) != self.num_layers :
-            raise ValueError("Activation_list is incorrect length. Length of the list must either be 1, or the number of hidden layers in the network.")
-
         activations_dict = {}
-        for func_name, func in getmembers(activation, isfunction):
+        for func_name, func in getmembers(activation_funcs, isfunction):
             activations_dict[func_name] = func
 
-        self.activations = []
-        for activation_string in activation_list:
-            if activation_string not in activations_dict:
-                raise KeyError("Activation: " + activation_string + " not found in activation functions")
-        
-            activation_func = activations_dict[activation_string]
-            self.activations.append(activation_func)
+        if activation_name not in activations_dict:
+            raise KeyError("Invalid activation function: " + activation_name + ". Supported activation functions can be found in numpy_activation.py.")
+
+        activation_func = activations_dict[activation_name]
+        self.activation = (activation_name, activation_func)
 
 
-    def __get_activation_func(self, layer_num):
-        """Get the activation function for the given hidden layer. """
-
-        if len(self.activations) == 1:
-            index = 0
-        else:
-            index = layer_num
-
-        return self.activations[index]
-
-
-    def __generate_coordinate_input(self):
+    def __generate_input(self):
         """Generate the x,y coordinate matrices used as input for the network. """
         (ncols, nrows) = self.resolution
 
@@ -110,35 +77,55 @@ class NumpyArtGenerator:
             if layer == self.num_layers - 1:
                 W = numpy.random.randn(results.shape[1], self.output_layer)
             else:
-                W = numpy.random.randn(results.shape[1], self.hidden_layer_size)
+                W = numpy.random.randn(results.shape[1], self.layer_width)
 
-            activation_function = self.__get_activation_func(layer)
-            results = activation_function(numpy.matmul(results, W))
+            activation_func = self.activation[1]
+            results = activation_func(numpy.matmul(results, W))
 
-        # TODO: Consider actual normalization (pros: more flexible with activation function... cons: probabaly slower)
-        # Would be curious to comment out this line and see what happens...
+        # TODO: Consider actual normalization (pros: more flexible with activation function... cons: probabaly a lot slower)
         results = (1 + results)/2.0
-        results = (255.0*results.reshape(nrows, ncols, results.shape[-1])).astype(numpy.uint8)
+        results = (255.0 * results.reshape(nrows, ncols, results.shape[-1])).astype(numpy.uint8)
         return results
 
+
     def run(self):
-        inputs = self.__generate_coordinate_input()
+        inputs = self.__generate_input()
         return self.forward_prop(inputs)
 
 
 if __name__ == "__main__":
-    resolution = (5120, 3200)
-    seed = 77704599
-    num_layers = 35
-    hidden_layer_size = 5
-    color = True
+    seed_min = 0
+    seed_max = 2147483647
+    layers_min = 0
+    layers_max = 50
+    width_min = 0
+    width_max = 20
+    default_resolution = (1920, 1080)
 
-    activation_list = ["tanh"]
-    # Example of multiple activation-functions (len(activation_list) == num_layers)
-    # activation_list = ["tanh", "tanh", "tanh", "tanh", "tanh", "tanh", "sech", "tanh", "tanh"]
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-s", "--seed", type=int, help="Seed value used by numpy random. Default is a random value between " + str(seed_min) + " - " + str(seed_max))
+    parser.add_argument("-l", "--layers", type=int, help="Number of hidden layers. Default is a random int between " + str(layers_min) + " - " + str(layers_max))
+    parser.add_argument("-w", "--width", type=int, help="Number of perceptrons in each hidden layer. Default is a random int between " + str(width_min) + " - " + str(width_max))
+    parser.add_argument("-r", '--resolution', nargs=2, type=int, help="Resolution of output image. Default is " + str(default_resolution))
+    parser.add_argument("-a", "--activation", default="tanh", help="Activation function name used in every hidden layer. Activation functions can be found in the numpy_activation file.")
+    args = parser.parse_args()
 
-    generator = NumpyArtGenerator(resolution, color, seed, num_layers, hidden_layer_size, activation_list)
-    image_result = generator.run()
+    if args.seed is None:
+        args.seed = random.randint(seed_min, seed_max)
+    if args.layers is None:
+        args.layers = random.randint(layers_min, layers_max)
+    if args.width is None:
+        args.width = random.randint(width_min, width_max)
+
+    if args.resolution is None:
+        args.resolution = default_resolution
+    else:
+        args.resolution = tuple(args.resolution)
+
+    generator = NumpyArtGenerator(args.resolution, args.seed, args.layers, args.width, args.activation)
+    numpy_image = generator.run()
 
     filename = str(generator) + ".jpg"
-    save_numpy_image(image_result, filename)
+    output_directory = "../images"
+    save_numpy_image(numpy_image, filename, output_directory)
+

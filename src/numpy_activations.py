@@ -4,7 +4,6 @@ import numpy
 #   To add a new activation function write a function here that takes a numpy array 
 #   and returns the new activated array. 
 
-
 def tanh(matrix):
     return numpy.tanh(matrix)
 
