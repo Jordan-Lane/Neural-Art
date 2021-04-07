@@ -84,7 +84,23 @@ class NumpyArtGenerator:
         return results
 
 
-    def run(self):
+    def print_details(self):
+        """Print details of the generator"""
+
+        print("Generator Settings:")
+        print(f"    Resolution: {self.resolution}")
+        print(f"    Seed: {self.seed}")
+        print(f"    Number of Layers: {self.num_layers}")
+        print(f"    Hidden Layer Width: {self.layer_width}")
+        print(f"    Activation Function: {self.activation[0]}")
+
+
+    def run(self, verbose):
+        """ Run the generator. This includes generating inputs and running the forward propagation network"""
+
+        if verbose:
+            self.print_details()
+
         inputs = self.__generate_input()
         return self.forward_prop(inputs)
 
