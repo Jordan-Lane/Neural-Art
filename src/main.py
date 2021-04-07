@@ -51,9 +51,9 @@ def batch_img_generation(args):
         filename = str(generator) + ".jpg"
         output_directory = "../images"
         save_numpy_image(numpy_image, filename, output_directory)
- 
 
-if __name__ == "__main__":
+
+def setup_arg_parse():
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers()
 
@@ -73,6 +73,10 @@ if __name__ == "__main__":
     batch_parser.add_argument("-a", "--activation", default="tanh", help="Activation function used in every hidden layer. Activation functions can be found in the numpy_activation file.")
     batch_parser.set_defaults(func=batch_img_generation)
 
+    return parser
+
+if __name__ == "__main__":
+    parser = setup_arg_parse()
     args = parser.parse_args()
 
     try:
