@@ -1,7 +1,6 @@
 import argparse
-import cv2
 import numpy
-import numpy_activations as activation_funcs
+import activations as activation_funcs
 import os
 import random
 
