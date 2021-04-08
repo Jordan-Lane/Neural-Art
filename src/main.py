@@ -1,7 +1,7 @@
 import argparse
 import random
-from art_net import NumpyArtGenerator
-from file_util import save_numpy_image
+from src.art_net import NumpyArtGenerator
+from src.file_util import save_numpy_image
 
 seed_min = 0
 seed_max = 2147483647
@@ -10,6 +10,7 @@ layers_max = 50
 width_min = 0
 width_max = 20
 default_resolution = (1920, 1080)
+output_directory = "images"
 
 
 def single_img_generation(args):
@@ -29,7 +30,6 @@ def single_img_generation(args):
     numpy_image = generator.run(args.verbose)
 
     filename = str(generator) + ".jpg"
-    output_directory = "../images"
     save_numpy_image(numpy_image, filename, output_directory)
 
 
@@ -40,7 +40,7 @@ def batch_img_generation(args):
         args.resolution = tuple(args.resolution)
 
     for i in range(args.number_of_images):
-        print(f"Generating image {i}/{args.number_of_images}")
+        print(f"Generating image {i+1}/{args.number_of_images}")
         args.seed = random.randint(seed_min, seed_max)
         args.layers = random.randint(layers_min, layers_max)
         args.width = random.randint(width_min, width_max)
@@ -49,7 +49,6 @@ def batch_img_generation(args):
         numpy_image = generator.run(args.verbose)
 
         filename = str(generator) + ".jpg"
-        output_directory = "../images"
         save_numpy_image(numpy_image, filename, output_directory)
 
 

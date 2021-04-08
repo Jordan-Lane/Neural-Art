@@ -1,10 +1,9 @@
 import argparse
 import numpy
-import activations as activation_funcs
+import src.activations as activation_funcs
 import os
 import random
 
-from file_util import save_numpy_image
 from inspect import getmembers, isfunction
 
 class NumpyArtGenerator:
