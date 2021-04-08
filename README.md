@@ -1,6 +1,6 @@
 # Neural Art
 
-Neural Art is a command line tool designed for fast and easy generation of Compositional Pattern Producing Networks. The toll can be used to create either a single, or batch of random images using the underlying network. 
+Neural Art is a command line tool designed for fast and easy generation of Compositional Pattern Producing Networks. The tool can be used to create either a single, or batch of random images using the underlying network. 
 
 The Numpy CPPN used to generate the image is directly based on the [blog post by Nenad Markuš](https://nenadmarkus.com/p/visualizing-audio-with-cppns/). I highly recommend reading the blog post as it gives a great introduction to CPNNs and the underlying math achieved with numpy. The post also goes on to create a very cool audio visualizer using CPPNs and Fourier Transforms. 
 
