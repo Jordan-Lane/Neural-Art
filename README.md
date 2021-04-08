@@ -1,14 +1,12 @@
 # Neural Art
 
-## About the Project
-
 Neural Art is a command line tool for generating abstract art using a Compositional Pattern Producing Network. The tool can be used to create either a single, or batch of random images using the underlying network. 
 
 The Numpy CPPN used to generate the image is directly based on the [blog post by Nenad Markuš](https://nenadmarkus.com/p/visualizing-audio-with-cppns/). I highly recommend reading the blog post as it gives a great introduction to CPNNs and the underlying math achieved with numpy. The post also goes on to create a very cool audio visualizer using CPPNs and Fourier Transforms. 
 
 This project was designed to expand on Markuš' implementation with more activation functions, and wrapping it with a command line tool that enables easier and faster creation of abstract art. 
 
-
+&nbsp;
 ## Installation
 
 This project is built using Python 3.9 and Pipenv. If you are unfamiliar with Pipenv, I recommend reading the official [Pipenv documentation](https://pipenv-fork.readthedocs.io/en/latest/).
@@ -22,9 +20,9 @@ pipenv sync
 
 This will create a new Python 3.9 virtual environment and install all neccesary dependencies from Pipfile.lock. If you have any issues while installing please refer to the **Common Installation Issues** section found at the bottom of this README.
 
+&nbsp;
 ## Usage
 The tool can be used to generate either a single, or batch of images. The single mode is designed to have a finer control over the underlying CPPN structure, while the batch mode is for generating multiple completely random images. 
-
 
 ### Single Image Creation
 ```zsh
@@ -49,6 +47,7 @@ Generate an image with a resolution of 5120x3600, numpy seed of 444, and a CPPN 
 python main.py single -v -r 5120 3600 -s 444 -l 10 -w 8 -a tanh
 ```
 
+&nbsp;
 ### Batch Image Creation
 ```zsh
 python main.py batch [-h] [-v] [-r RESOLUTION RESOLUTION] [-a ACTIVATION] number_of_images
@@ -62,7 +61,7 @@ Generate 10 random images using the sech activation function
 python main.py batch -a sech 10
 ```
 
-
+&nbsp;
 ## Tips and Tricks
 This tool is designed for experimentation! Therefore I encourage you to mess around with the different networks settings and see if you generate any images that interest you.
 
@@ -71,11 +70,11 @@ A couple things:
 - Tanh is by far the best activation function for producing interesting art. I plan on adding functionality to use multiple activation functions, however I haven't figured out a nice way to achieve this with the current CLI. 
 - Have fun!
 
-
+&nbsp;
 ## Common Installation Issues
 If unable to build numpy wheel for opencv-python package, you need to set the environment variable SYSTEM_VERSION_COMPAT=1. https://github.com/pypa/pipenv/issues/4576. 
 
-
+&nbsp;
 ## References
 Original Numpy network used here:
 [Using CPPNs to generate abstract visualizations from audio data](https://nenadmarkus.com/p/visualizing-audio-with-cppns/)
