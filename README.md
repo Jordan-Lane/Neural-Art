@@ -1,4 +1,3 @@
-&nbsp;
 # Neural Art
 
 Neural Art is a command line tool designed for fast and easy generation of Compositional Pattern Producing Networks. The toll can be used to create either a single, or batch of random images using the underlying network. 
