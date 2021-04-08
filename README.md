@@ -1,4 +1,5 @@
 # Neural Art
+&nbsp;
 
 Neural Art is a command line tool for generating abstract art using a Compositional Pattern Producing Network. The tool can be used to create either a single, or batch of random images using the underlying network. 
 
