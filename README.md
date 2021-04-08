@@ -4,7 +4,7 @@ Neural Art is a command line tool for generating abstract art using a Compositio
 
 The Numpy CPPN used to generate the image is directly based on the [blog post by Nenad Markuš](https://nenadmarkus.com/p/visualizing-audio-with-cppns/). I highly recommend reading the blog post as it gives a great introduction to CPNNs and the underlying math achieved with numpy. The post also goes on to create a very cool audio visualizer using CPPNs and Fourier Transforms. 
 
-This project was designed to expand on Markuš' implementation with more activation functions, and wrapping it with a command line tool that enables easier and faster creation of abstract art. 
+This project was designed for fast and easy generation of CPPNs images through the command line. 
 
 &nbsp;
 ## Installation
@@ -18,20 +18,20 @@ pipenv shell
 pipenv sync
 ```
 
-This will create a new Python 3.9 virtual environment and install all neccesary dependencies from Pipfile.lock. If you have any issues while installing please refer to the **Common Installation Issues** section found at the bottom of this README.
+This will create a new Python 3.9 virtual environment and install all neccesary dependencies from Pipfile.lock. If you have any issues while installing please refer to the **Common Installation Issues** at the bottom of this README.
 
 &nbsp;
 ## Usage
-The tool can be used to generate either a single, or batch of images. The single mode is designed to have a finer control over the underlying CPPN structure, while the batch mode is for generating multiple completely random images. 
+The tool can be used to generate either a single, or a batch of images. The single mode is designed to have a finer control over the underlying CPPN structure, while the batch mode is for generating multiple completely random images. 
 
 ### Single Image Creation
 ```zsh
 python main.py single [-h] [-v] [-s SEED] [-l LAYERS] [-w WIDTH] [-r RESOLUTION RESOLUTION] [-a ACTIVATION]
 ```
 
-The single command generates a single abstract image based on the network settings passed in the by various flags. All flags are optional, and have default values. 
+The single command generates a single abstract image based on the neural network settings passed in by the various flags. All flags are optional, and have default values. 
 
-More info about the various flags and their default values can be found by running with the help flag:
+More info about the various flags and their default values can be found with the help flag:
 ```zsh
 python main.py single -h
 ```
@@ -63,10 +63,10 @@ python main.py batch -a sech 10
 
 &nbsp;
 ## Tips and Tricks
-This tool is designed for experimentation! Therefore I encourage you to mess around with the different networks settings and see if you generate any images that interest you.
+This tool is designed for experimentation! Therefore I encourage you to mess around with the different flags and the effects they have on the generated image.
 
 A couple things:
-- I recommend setting the resolution quite high. The image generation will be quite a lot slower, but the outputted images are generally much nicer.
+- I recommend setting the resolution quite high. The image generation will be quite a lot slower, but the outputted images are generally much nicer (YMMV).
 - Tanh is by far the best activation function for producing interesting art. I plan on adding functionality to use multiple activation functions, however I haven't figured out a nice way to achieve this with the current CLI. 
 - Have fun!
 
