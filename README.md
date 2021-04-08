@@ -82,6 +82,7 @@ Original Numpy network used here:
 [Using CPPNs to generate abstract visualizations from audio data](https://nenadmarkus.com/p/visualizing-audio-with-cppns/)
 
 Further CPPN Reading and Projects:
+
 [Compositional Pattern Producing Networks: A Novel Abstraction of Development](https://eplex.cs.ucf.edu/papers/stanley_gpem07.pdf)
 [Understanding Compositional Pattern Producing Networks (Part One)](https://towardsdatascience.com/understanding-compositional-pattern-producing-networks-810f6bef1b88)
 [Real time abstract art generation using a neural net](https://www.expunctis.com/2020/01/19/Abstract-art.html)
