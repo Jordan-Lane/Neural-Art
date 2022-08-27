@@ -188,4 +188,7 @@ Thumbs.db
 !.vscode/extensions.json
 *.code-workspace
 
+## Project Specific ##
+images/
+
 # End of https://www.toptal.com/developers/gitignore/api/macos,vscode,python
